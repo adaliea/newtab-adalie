@@ -1,7 +1,7 @@
 import { fetchJSON } from '../lib/api.js';
+import { getCached, setCache, showRefreshing, hideRefreshing, showStale, hideStale } from '../lib/cache.js';
 
 const CACHE_KEY = 'weatherCache';
-const CACHE_TTL = 30 * 60 * 1000; // 30 minutes
 
 export async function initWeather(container, settings) {
   const content = container.querySelector('.widget-content');
@@ -12,27 +12,34 @@ export async function initWeather(container, settings) {
     return;
   }
 
-  try {
-    const cached = await getCachedWeather();
-    if (cached) {
-      render(content, cached, settings.weatherUnits);
-      return;
-    }
+  const cached = await getCached(CACHE_KEY);
+  if (cached) {
+    render(content, cached, settings.weatherUnits);
+    showRefreshing(container);
+  }
 
+  try {
     const position = await getPosition();
     const { latitude: lat, longitude: lon } = position.coords;
     const url = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${settings.weatherApiKey}&units=${settings.weatherUnits}`;
     const data = await fetchJSON(url);
 
-    await cacheWeather(data);
+    await setCache(CACHE_KEY, data);
+    hideStale(container);
     render(content, data, settings.weatherUnits);
   } catch (err) {
-    content.className = 'widget-content widget-error';
-    if (err.message.includes('denied') || err.message.includes('permission')) {
-      content.textContent = 'Location access denied. Allow location to see weather.';
+    if (cached) {
+      showStale(container, 'Showing cached data — refresh failed');
     } else {
-      content.textContent = `Could not load weather: ${err.message}`;
+      content.className = 'widget-content widget-error';
+      if (err.message.includes('denied') || err.message.includes('permission')) {
+        content.textContent = 'Location access denied. Allow location to see weather.';
+      } else {
+        content.textContent = `Could not load weather: ${err.message}`;
+      }
     }
+  } finally {
+    hideRefreshing(container);
   }
 }
 
@@ -71,22 +78,7 @@ function getPosition() {
   return new Promise((resolve, reject) => {
     navigator.geolocation.getCurrentPosition(resolve, reject, {
       timeout: 10000,
-      maximumAge: CACHE_TTL
+      maximumAge: 30 * 60 * 1000
     });
-  });
-}
-
-async function getCachedWeather() {
-  const result = await chrome.storage.local.get(CACHE_KEY);
-  const cached = result[CACHE_KEY];
-  if (cached && Date.now() - cached.timestamp < CACHE_TTL) {
-    return cached.data;
-  }
-  return null;
-}
-
-async function cacheWeather(data) {
-  await chrome.storage.local.set({
-    [CACHE_KEY]: { data, timestamp: Date.now() }
   });
 }

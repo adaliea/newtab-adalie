@@ -1,4 +1,8 @@
 import { fetchJSON } from '../lib/api.js';
+import { getCached, setCache, showRefreshing, hideRefreshing, showStale, hideStale } from '../lib/cache.js';
+
+const ASSIGN_CACHE = 'canvasAssignmentsCache';
+const ANNOUNCE_CACHE = 'canvasAnnouncementsCache';
 
 export async function initCanvas(assignmentsContainer, announcementsContainer, settings) {
   const assignContent = assignmentsContainer.querySelector('.widget-content');
@@ -11,6 +15,18 @@ export async function initCanvas(assignmentsContainer, announcementsContainer, s
     announceContent.className = 'widget-content setup-message';
     announceContent.innerHTML = msg;
     return;
+  }
+
+  const cachedAssign = await getCached(ASSIGN_CACHE);
+  const cachedAnnounce = await getCached(ANNOUNCE_CACHE);
+
+  if (cachedAssign) {
+    renderAssignments(assignContent, cachedAssign);
+    showRefreshing(assignmentsContainer);
+  }
+  if (cachedAnnounce) {
+    renderAnnouncements(announceContent, cachedAnnounce);
+    showRefreshing(announcementsContainer);
   }
 
   const baseUrl = settings.canvasUrl.replace(/\/+$/, '');
@@ -37,13 +53,29 @@ export async function initCanvas(assignmentsContainer, announcementsContainer, s
       (item) => item.type === 'Announcement'
     ).slice(0, 5);
 
+    await setCache(ASSIGN_CACHE, assignments);
+    await setCache(ANNOUNCE_CACHE, announcements);
+
+    hideStale(assignmentsContainer);
+    hideStale(announcementsContainer);
     renderAssignments(assignContent, assignments);
     renderAnnouncements(announceContent, announcements);
   } catch (err) {
-    assignContent.className = 'widget-content widget-error';
-    assignContent.textContent = `Could not load Canvas data: ${err.message}`;
-    announceContent.className = 'widget-content widget-error';
-    announceContent.textContent = `Could not load Canvas data: ${err.message}`;
+    if (cachedAssign) {
+      showStale(assignmentsContainer, 'Showing cached data — refresh failed');
+    } else {
+      assignContent.className = 'widget-content widget-error';
+      assignContent.textContent = `Could not load Canvas data: ${err.message}`;
+    }
+    if (cachedAnnounce) {
+      showStale(announcementsContainer, 'Showing cached data — refresh failed');
+    } else {
+      announceContent.className = 'widget-content widget-error';
+      announceContent.textContent = `Could not load Canvas data: ${err.message}`;
+    }
+  } finally {
+    hideRefreshing(assignmentsContainer);
+    hideRefreshing(announcementsContainer);
   }
 }
 

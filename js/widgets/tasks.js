@@ -1,14 +1,36 @@
 import { getGoogleToken, removeCachedToken } from '../lib/google-auth.js';
 import { fetchJSON } from '../lib/api.js';
+import { getCached, setCache, showRefreshing, hideRefreshing, showStale, hideStale } from '../lib/cache.js';
 
 const TASKS_API = 'https://www.googleapis.com/tasks/v1';
+const CACHE_KEY = 'tasksCache';
 
 export async function initTasks(container) {
   const content = container.querySelector('.widget-content');
 
+  const cached = await getCached(CACHE_KEY);
+  if (cached) {
+    try {
+      const token = await getGoogleToken(false);
+      renderTasks(content, cached.tasks, cached.taskLists, cached.activeListId, token);
+      showRefreshing(container);
+      await refreshTasks(container, content, token);
+    } catch {
+      renderTasksReadonly(content, cached.tasks);
+      showRefreshing(container);
+      try {
+        const token = await getGoogleToken(false);
+        await refreshTasks(container, content, token);
+      } catch {
+        hideRefreshing(container);
+      }
+    }
+    return;
+  }
+
   try {
     const token = await getGoogleToken(false);
-    await loadTasks(content, token);
+    await loadTasks(container, content, token);
   } catch {
     content.className = 'widget-content';
     content.innerHTML = `
@@ -19,7 +41,7 @@ export async function initTasks(container) {
         const token = await getGoogleToken(true);
         content.className = 'widget-content widget-loading';
         content.textContent = 'Loading...';
-        await loadTasks(content, token);
+        await loadTasks(container, content, token);
       } catch (err) {
         content.className = 'widget-content widget-error';
         content.textContent = `Could not connect: ${err.message}`;
@@ -28,7 +50,17 @@ export async function initTasks(container) {
   }
 }
 
-async function loadTasks(el, token) {
+async function refreshTasks(container, el, token) {
+  try {
+    await loadTasks(container, el, token);
+  } catch {
+    showStale(container, 'Showing cached data — refresh failed');
+  } finally {
+    hideRefreshing(container);
+  }
+}
+
+async function loadTasks(container, el, token) {
   const headers = { Authorization: `Bearer ${token}` };
 
   try {
@@ -37,6 +69,7 @@ async function loadTasks(el, token) {
     if (taskLists.length === 0) {
       el.className = 'widget-content widget-empty';
       el.textContent = 'No task lists found';
+      hideRefreshing(container);
       return;
     }
 
@@ -51,16 +84,33 @@ async function loadTasks(el, token) {
       headers
     );
 
-    renderTasks(el, tasks.items || [], taskLists, defaultList.id, token);
+    const items = tasks.items || [];
+    await setCache(CACHE_KEY, { tasks: items, taskLists, activeListId: defaultList.id });
+    hideStale(container);
+    renderTasks(el, items, taskLists, defaultList.id, token);
+    hideRefreshing(container);
   } catch (err) {
     if (err.message.includes('401')) {
       await removeCachedToken(token);
       const newToken = await getGoogleToken(true);
-      await loadTasks(el, newToken);
+      await loadTasks(container, el, newToken);
     } else {
       throw err;
     }
   }
+}
+
+function renderTasksReadonly(el, tasks) {
+  el.className = 'widget-content';
+  if (!tasks || tasks.length === 0) {
+    el.innerHTML = '<div class="widget-empty">All caught up!</div>';
+    return;
+  }
+  const items = tasks.filter((t) => t.title).map((task) => {
+    const due = task.due ? `<span class="widget-item-meta">${formatDueDate(task.due)}</span>` : '';
+    return `<li><div class="widget-item-title">${escapeHtml(task.title)}</div>${due}</li>`;
+  }).join('');
+  el.innerHTML = `<ul class="widget-list">${items}</ul>`;
 }
 
 function renderTasks(el, tasks, taskLists, activeListId, token) {
@@ -131,7 +181,8 @@ function attachAddForm(el, taskLists, activeListId, token) {
 
       input.value = '';
       input.disabled = false;
-      await loadTasks(el, token);
+      const container = el.closest('.widget');
+      await loadTasks(container, el, token);
     } catch {
       input.disabled = false;
     }
@@ -193,7 +244,9 @@ function attachSwitcher(el, taskLists, token) {
       `${TASKS_API}/lists/${listId}/tasks?${params}`,
       { Authorization: `Bearer ${token}` }
     );
-    renderTasks(el, tasks.items || [], taskLists, listId, token);
+    const items = tasks.items || [];
+    await setCache(CACHE_KEY, { tasks: items, taskLists, activeListId: listId });
+    renderTasks(el, items, taskLists, listId, token);
   });
 }
 

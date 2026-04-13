@@ -1,4 +1,7 @@
 import { fetchJSON } from '../lib/api.js';
+import { getCached, setCache, showRefreshing, hideRefreshing, showStale, hideStale } from '../lib/cache.js';
+
+const CACHE_KEY = 'githubCache';
 
 export async function initGitHub(container, settings) {
   const content = container.querySelector('.widget-content');
@@ -7,6 +10,12 @@ export async function initGitHub(container, settings) {
     content.className = 'widget-content setup-message';
     content.innerHTML = 'Add your <a href="settings.html">GitHub token</a> to see assigned work.';
     return;
+  }
+
+  const cached = await getCached(CACHE_KEY);
+  if (cached) {
+    render(content, cached.issues, cached.prs);
+    showRefreshing(container);
   }
 
   const headers = {
@@ -20,14 +29,21 @@ export async function initGitHub(container, settings) {
       fetchJSON('https://api.github.com/search/issues?q=is:pr+is:open+assignee:@me&per_page=10', headers)
     ]);
 
-    // Filter out pull requests from the issues endpoint
     const realIssues = issues.filter((i) => !i.pull_request);
     const pullRequests = prs.items || [];
 
+    await setCache(CACHE_KEY, { issues: realIssues, prs: pullRequests });
+    hideStale(container);
     render(content, realIssues, pullRequests);
   } catch (err) {
-    content.className = 'widget-content widget-error';
-    content.textContent = `Could not load GitHub data: ${err.message}`;
+    if (cached) {
+      showStale(container, 'Showing cached data — refresh failed');
+    } else {
+      content.className = 'widget-content widget-error';
+      content.textContent = `Could not load GitHub data: ${err.message}`;
+    }
+  } finally {
+    hideRefreshing(container);
   }
 }
 
