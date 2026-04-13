@@ -66,7 +66,6 @@ async function loadTasks(el, token) {
 function renderTasks(el, tasks, taskLists, activeListId, token) {
   el.className = 'widget-content';
 
-  // Task list switcher
   let switcher = '';
   if (taskLists.length > 1) {
     const options = taskLists.map((list) =>
@@ -75,9 +74,14 @@ function renderTasks(el, tasks, taskLists, activeListId, token) {
     switcher = `<select class="task-list-switcher">${options}</select>`;
   }
 
+  const addForm = `<div class="task-add-form">
+    <input type="text" class="task-add-input" placeholder="Add a task..." data-list-id="${activeListId}">
+  </div>`;
+
   if (tasks.length === 0) {
-    el.innerHTML = `${switcher}<div class="widget-empty">All caught up!</div>`;
+    el.innerHTML = `${switcher}${addForm}<div class="widget-empty">All caught up!</div>`;
     attachSwitcher(el, taskLists, token);
+    attachAddForm(el, taskLists, activeListId, token);
     return;
   }
 
@@ -87,14 +91,92 @@ function renderTasks(el, tasks, taskLists, activeListId, token) {
       const due = task.due
         ? `<span class="widget-item-meta">${formatDueDate(task.due)}</span>`
         : '';
-      return `<li>
-        <div class="widget-item-title">${escapeHtml(task.title)}</div>
-        ${due}
+      return `<li data-list-id="${activeListId}" data-task-id="${task.id}">
+        <label class="task-row">
+          <input type="checkbox" class="task-checkbox">
+          <span class="task-text">
+            <span class="widget-item-title">${escapeHtml(task.title)}</span>
+            ${due}
+          </span>
+        </label>
       </li>`;
     }).join('');
 
-  el.innerHTML = `${switcher}<ul class="widget-list">${items}</ul>`;
+  el.innerHTML = `${switcher}${addForm}<ul class="widget-list task-list">${items}</ul>`;
+
   attachSwitcher(el, taskLists, token);
+  attachAddForm(el, taskLists, activeListId, token);
+  attachCheckboxes(el, taskLists, activeListId, token);
+}
+
+function attachAddForm(el, taskLists, activeListId, token) {
+  const input = el.querySelector('.task-add-input');
+  if (!input) return;
+
+  input.addEventListener('keydown', async (e) => {
+    if (e.key !== 'Enter') return;
+    const title = input.value.trim();
+    if (!title) return;
+
+    input.disabled = true;
+    try {
+      await fetch(`${TASKS_API}/lists/${activeListId}/tasks`, {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ title })
+      });
+
+      input.value = '';
+      input.disabled = false;
+      await loadTasks(el, token);
+    } catch {
+      input.disabled = false;
+    }
+  });
+}
+
+function attachCheckboxes(el, taskLists, activeListId, token) {
+  el.querySelectorAll('.task-checkbox').forEach((checkbox) => {
+    checkbox.addEventListener('change', async () => {
+      const li = checkbox.closest('li');
+      const listId = li.dataset.listId;
+      const taskId = li.dataset.taskId;
+
+      li.classList.add('task-completing');
+      checkbox.disabled = true;
+
+      try {
+        await fetch(`${TASKS_API}/lists/${listId}/tasks/${taskId}`, {
+          method: 'PATCH',
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ status: 'completed' })
+        });
+
+        li.classList.add('task-completed');
+        setTimeout(() => {
+          li.remove();
+          const remaining = el.querySelectorAll('.task-list li');
+          if (remaining.length === 0) {
+            const list = el.querySelector('.task-list');
+            if (list) {
+              list.insertAdjacentHTML('afterend', '<div class="widget-empty">All caught up!</div>');
+              list.remove();
+            }
+          }
+        }, 400);
+      } catch {
+        checkbox.checked = false;
+        checkbox.disabled = false;
+        li.classList.remove('task-completing');
+      }
+    });
+  });
 }
 
 function attachSwitcher(el, taskLists, token) {

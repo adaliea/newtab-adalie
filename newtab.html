@@ -20,6 +20,22 @@
       <div class="date"></div>
     </section>
 
+    <nav class="quick-links" id="quick-links"></nav>
+
+    <section class="sites-section" id="sites-section">
+      <div class="sites-header">
+        <span class="widget-header" style="margin-bottom:0">Sites</span>
+        <button class="sites-add-btn" id="add-site-btn" title="Pin a site">+</button>
+      </div>
+      <div class="sites-grid" id="sites-grid"></div>
+      <div class="pin-form" id="pin-form" hidden>
+        <input type="text" id="pin-name" placeholder="Name" class="pin-input">
+        <input type="url" id="pin-url" placeholder="https://..." class="pin-input">
+        <button class="btn-connect" id="pin-save">Add</button>
+        <button class="pin-cancel" id="pin-cancel">Cancel</button>
+      </div>
+    </section>
+
     <div class="widgets">
       <section class="widget" id="widget-weather">
         <div class="widget-header">Weather</div>
@@ -42,7 +58,12 @@
       </section>
 
       <section class="widget" id="widget-canvas">
-        <div class="widget-header">Canvas</div>
+        <div class="widget-header">Canvas — Assignments</div>
+        <div class="widget-content widget-loading">Loading...</div>
+      </section>
+
+      <section class="widget" id="widget-announcements">
+        <div class="widget-header">Canvas — Announcements</div>
         <div class="widget-content widget-loading">Loading...</div>
       </section>
     </div>

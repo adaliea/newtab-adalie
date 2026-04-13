@@ -4,7 +4,8 @@ const DEFAULTS = {
   weatherUnits: 'metric',
   githubToken: '',
   canvasUrl: '',
-  canvasToken: ''
+  canvasToken: '',
+  pinnedSites: []
 };
 
 export async function getSettings() {

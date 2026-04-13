@@ -1,18 +1,20 @@
 import { fetchJSON } from '../lib/api.js';
 
-export async function initCanvas(container, settings) {
-  const content = container.querySelector('.widget-content');
+export async function initCanvas(assignmentsContainer, announcementsContainer, settings) {
+  const assignContent = assignmentsContainer.querySelector('.widget-content');
+  const announceContent = announcementsContainer.querySelector('.widget-content');
 
   if (!settings.canvasUrl || !settings.canvasToken) {
-    content.className = 'widget-content setup-message';
-    content.innerHTML = 'Add your <a href="settings.html">Canvas URL and token</a> to see assignments.';
+    const msg = 'Add your <a href="settings.html">Canvas URL and token</a> to see data.';
+    assignContent.className = 'widget-content setup-message';
+    assignContent.innerHTML = msg;
+    announceContent.className = 'widget-content setup-message';
+    announceContent.innerHTML = msg;
     return;
   }
 
   const baseUrl = settings.canvasUrl.replace(/\/+$/, '');
-  const headers = {
-    Authorization: `Bearer ${settings.canvasToken}`
-  };
+  const headers = { Authorization: `Bearer ${settings.canvasToken}` };
 
   try {
     const today = new Date().toISOString().split('T')[0];
@@ -35,35 +37,36 @@ export async function initCanvas(container, settings) {
       (item) => item.type === 'Announcement'
     ).slice(0, 5);
 
-    render(content, assignments, announcements);
+    renderAssignments(assignContent, assignments);
+    renderAnnouncements(announceContent, announcements);
   } catch (err) {
-    content.className = 'widget-content widget-error';
-    content.textContent = `Could not load Canvas data: ${err.message}`;
+    assignContent.className = 'widget-content widget-error';
+    assignContent.textContent = `Could not load Canvas data: ${err.message}`;
+    announceContent.className = 'widget-content widget-error';
+    announceContent.textContent = `Could not load Canvas data: ${err.message}`;
   }
 }
 
-function render(el, assignments, announcements) {
+function renderAssignments(el, assignments) {
   el.className = 'widget-content';
 
-  if (assignments.length === 0 && announcements.length === 0) {
-    el.innerHTML = '<div class="widget-empty">No upcoming assignments or announcements</div>';
+  if (assignments.length === 0) {
+    el.innerHTML = '<div class="widget-empty">No upcoming assignments</div>';
     return;
   }
 
-  let html = '';
+  el.innerHTML = `<ul class="widget-list">${assignments.map(renderAssignment).join('')}</ul>`;
+}
 
-  if (assignments.length > 0) {
-    html += '<div class="github-section-label">Upcoming</div>';
-    html += `<ul class="widget-list">${assignments.map(renderAssignment).join('')}</ul>`;
+function renderAnnouncements(el, announcements) {
+  el.className = 'widget-content';
+
+  if (announcements.length === 0) {
+    el.innerHTML = '<div class="widget-empty">No recent announcements</div>';
+    return;
   }
 
-  if (announcements.length > 0) {
-    if (assignments.length > 0) html += '<div style="margin-top: var(--spacing-sm)"></div>';
-    html += '<div class="github-section-label">Announcements</div>';
-    html += `<ul class="widget-list">${announcements.map(renderAnnouncement).join('')}</ul>`;
-  }
-
-  el.innerHTML = html;
+  el.innerHTML = `<ul class="widget-list">${announcements.map(renderAnnouncement).join('')}</ul>`;
 }
 
 function renderAssignment(item) {
@@ -87,9 +90,14 @@ function renderAssignment(item) {
     }
   }
 
+  const url = item.html_url || item.plannable?.html_url || '';
+  const titleHtml = url
+    ? `<a href="${url}" target="_blank" rel="noopener">${escapeHtml(title)}</a>`
+    : escapeHtml(title);
+
   return `<li>
     <div class="widget-item-sub">${escapeHtml(course)}</div>
-    <div class="widget-item-title">${escapeHtml(title)}</div>
+    <div class="widget-item-title">${titleHtml}</div>
     ${dueStr ? `<div class="widget-item-meta">${dueStr}</div>` : ''}
   </li>`;
 }
@@ -97,14 +105,19 @@ function renderAssignment(item) {
 function renderAnnouncement(item) {
   const course = item.context_type === 'Course' ? (item.course?.name || '') : '';
   const title = item.title || 'Untitled';
+  const url = item.html_url || '';
   const posted = new Date(item.created_at).toLocaleDateString(undefined, {
     month: 'short',
     day: 'numeric'
   });
 
+  const titleHtml = url
+    ? `<a href="${url}" target="_blank" rel="noopener">${escapeHtml(title)}</a>`
+    : escapeHtml(title);
+
   return `<li>
     <div class="widget-item-sub">${escapeHtml(course)}</div>
-    <div class="widget-item-title">${escapeHtml(title)}</div>
+    <div class="widget-item-title">${titleHtml}</div>
     <div class="widget-item-meta">${posted}</div>
   </li>`;
 }

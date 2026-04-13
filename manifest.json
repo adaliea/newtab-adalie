@@ -9,7 +9,8 @@
   },
   "permissions": [
     "identity",
-    "storage"
+    "storage",
+    "topSites"
   ],
   "host_permissions": [
     "https://api.openweathermap.org/*",
@@ -23,7 +24,7 @@
     "client_id": "1076513527084-jrhsvfivdm90dth6m1k2i0lj940g6ghn.apps.googleusercontent.com",
     "scopes": [
       "https://www.googleapis.com/auth/calendar.readonly",
-      "https://www.googleapis.com/auth/tasks.readonly"
+      "https://www.googleapis.com/auth/tasks"
     ]
   },
   "options_page": "settings.html",

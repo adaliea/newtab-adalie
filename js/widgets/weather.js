@@ -38,9 +38,13 @@ export async function initWeather(container, settings) {
 
 function render(el, data, units) {
   const unitSymbol = units === 'imperial' ? 'F' : 'C';
+  const speedUnit = units === 'imperial' ? 'mph' : 'm/s';
   const temp = Math.round(data.main.temp);
+  const feelsLike = Math.round(data.main.feels_like);
   const high = Math.round(data.main.temp_max);
   const low = Math.round(data.main.temp_min);
+  const humidity = data.main.humidity;
+  const wind = Math.round(data.wind.speed);
   const desc = data.weather[0].description;
   const icon = data.weather[0].icon;
   const city = data.name;
@@ -55,6 +59,7 @@ function render(el, data, units) {
       </div>
     </div>
     <div class="weather-details">${capitalize(desc)} · H: ${high}° L: ${low}°</div>
+    <div class="weather-details">Feels like ${feelsLike}° · Humidity ${humidity}% · Wind ${wind} ${speedUnit}</div>
   `;
 }
 
