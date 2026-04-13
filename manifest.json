@@ -1,0 +1,35 @@
+{
+  "manifest_version": 3,
+  "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAxZY7jj7g1ep/NQx/aU82QCAghckWlI1G/dQQJQq7++Tx18kCITz0Tv1sYFRWHS1s09LCdar3Lhmdk5qsO6oNVYrBAYZb6Eb04eF9no+EXeNkP/rT0+d/R885A5LvJdmUJ+hkdkWeCp5soRsB3Rpf+6Be7DVuAUFM1sg8k8WG5NIA/gE9KiPR1fvV+qX8OH5n8Fthr0FoJ8vDGrJptNj+6GJx7xIoJoQ8bA5c9zBzYcp2bUaKDr71lBgPb8DYWgkfjdWZujxW/KuA0E43CnjhCc0jcoKS+huZdI/ql9MngWhw+23QQZw+7UaovdurGr3r4J7HhmVmuNSFavj+rPxNTQIDAQAB",
+  "name": "Adalie's New Tab",
+  "version": "1.0.0",
+  "description": "A minimal new tab page with calendar, tasks, weather, GitHub, and Canvas.",
+  "chrome_url_overrides": {
+    "newtab": "newtab.html"
+  },
+  "permissions": [
+    "identity",
+    "storage"
+  ],
+  "host_permissions": [
+    "https://api.openweathermap.org/*",
+    "https://api.github.com/*",
+    "https://www.googleapis.com/*"
+  ],
+  "optional_host_permissions": [
+    "https://*/*"
+  ],
+  "oauth2": {
+    "client_id": "1076513527084-jrhsvfivdm90dth6m1k2i0lj940g6ghn.apps.googleusercontent.com",
+    "scopes": [
+      "https://www.googleapis.com/auth/calendar.readonly",
+      "https://www.googleapis.com/auth/tasks.readonly"
+    ]
+  },
+  "options_page": "settings.html",
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  }
+}

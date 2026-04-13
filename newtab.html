@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>New Tab</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/common.css">
+  <link rel="stylesheet" href="css/newtab.css">
+</head>
+<body>
+  <a href="settings.html" class="settings-link" title="Settings">&#9881;</a>
+
+  <div class="page">
+    <section class="hero" id="widget-clock">
+      <div class="greeting"></div>
+      <div class="time"></div>
+      <div class="date"></div>
+    </section>
+
+    <div class="widgets">
+      <section class="widget" id="widget-weather">
+        <div class="widget-header">Weather</div>
+        <div class="widget-content widget-loading">Loading...</div>
+      </section>
+
+      <section class="widget" id="widget-calendar">
+        <div class="widget-header">Calendar</div>
+        <div class="widget-content widget-loading">Loading...</div>
+      </section>
+
+      <section class="widget" id="widget-tasks">
+        <div class="widget-header">Tasks</div>
+        <div class="widget-content widget-loading">Loading...</div>
+      </section>
+
+      <section class="widget" id="widget-github">
+        <div class="widget-header">GitHub</div>
+        <div class="widget-content widget-loading">Loading...</div>
+      </section>
+
+      <section class="widget" id="widget-canvas">
+        <div class="widget-header">Canvas</div>
+        <div class="widget-content widget-loading">Loading...</div>
+      </section>
+    </div>
+  </div>
+
+  <script type="module" src="js/newtab.js"></script>
+</body>
+</html>

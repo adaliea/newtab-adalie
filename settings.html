@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>New Tab Settings</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/common.css">
+  <link rel="stylesheet" href="css/settings.css">
+</head>
+<body>
+  <div class="settings-page">
+    <h1>Settings</h1>
+
+    <form id="settings-form">
+      <fieldset>
+        <legend>General</legend>
+        <label>
+          <span class="label-text">Your name</span>
+          <input type="text" id="userName" placeholder="Used in the greeting">
+        </label>
+      </fieldset>
+
+      <fieldset>
+        <legend>Weather</legend>
+        <p class="fieldset-help">
+          Get a free API key from
+          <a href="https://openweathermap.org/appid" target="_blank" rel="noopener">OpenWeatherMap</a>.
+        </p>
+        <label>
+          <span class="label-text">API Key</span>
+          <div class="password-field">
+            <input type="password" id="weatherApiKey" placeholder="Your OpenWeatherMap API key">
+            <button type="button" class="toggle-visibility" data-target="weatherApiKey">Show</button>
+          </div>
+        </label>
+        <label>
+          <span class="label-text">Units</span>
+          <select id="weatherUnits">
+            <option value="metric">Celsius</option>
+            <option value="imperial">Fahrenheit</option>
+          </select>
+        </label>
+      </fieldset>
+
+      <fieldset>
+        <legend>Google Calendar &amp; Tasks</legend>
+        <p class="fieldset-help">
+          Uses your signed-in Chrome account. You'll be prompted to authorize access when you first open a new tab.
+        </p>
+        <div id="google-status" class="status-indicator">
+          <span class="status-dot"></span>
+          <span class="status-text">Checking...</span>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>GitHub</legend>
+        <p class="fieldset-help">
+          Create a
+          <a href="https://github.com/settings/tokens/new?scopes=repo,read:org&description=Adalie+New+Tab" target="_blank" rel="noopener">personal access token</a>
+          with <code>repo</code> and <code>read:org</code> scopes.
+        </p>
+        <label>
+          <span class="label-text">Personal Access Token</span>
+          <div class="password-field">
+            <input type="password" id="githubToken" placeholder="ghp_...">
+            <button type="button" class="toggle-visibility" data-target="githubToken">Show</button>
+          </div>
+        </label>
+      </fieldset>
+
+      <fieldset>
+        <legend>Canvas</legend>
+        <p class="fieldset-help">
+          Enter your institution's Canvas URL and an access token.
+          Generate a token in Canvas under Account &rarr; Settings &rarr; New Access Token.
+        </p>
+        <label>
+          <span class="label-text">Canvas URL</span>
+          <input type="url" id="canvasUrl" placeholder="https://canvas.university.edu">
+        </label>
+        <label>
+          <span class="label-text">Access Token</span>
+          <div class="password-field">
+            <input type="password" id="canvasToken" placeholder="Your Canvas API token">
+            <button type="button" class="toggle-visibility" data-target="canvasToken">Show</button>
+          </div>
+        </label>
+      </fieldset>
+
+      <div class="form-actions">
+        <button type="submit" class="btn-primary">Save Settings</button>
+        <span id="save-status" class="save-status"></span>
+      </div>
+    </form>
+  </div>
+
+  <script type="module" src="js/settings.js"></script>
+</body>
+</html>

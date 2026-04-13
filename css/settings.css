@@ -1,0 +1,161 @@
+.settings-page {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: var(--spacing-lg);
+}
+
+h1 {
+  font-size: var(--font-size-xl);
+  font-weight: 200;
+  margin-bottom: var(--spacing-lg);
+}
+
+fieldset {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  padding: var(--spacing-md);
+  margin-bottom: var(--spacing-md);
+  background: var(--color-surface);
+}
+
+legend {
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--color-text-muted);
+  padding: 0 var(--spacing-xs);
+}
+
+.fieldset-help {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+  margin-bottom: var(--spacing-sm);
+}
+
+.fieldset-help code {
+  background: var(--color-bg);
+  padding: 1px 4px;
+  border-radius: 3px;
+  font-size: var(--font-size-xs);
+}
+
+label {
+  display: block;
+  margin-bottom: var(--spacing-sm);
+}
+
+label:last-child {
+  margin-bottom: 0;
+}
+
+.label-text {
+  display: block;
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+  margin-bottom: 4px;
+}
+
+input[type="text"],
+input[type="password"],
+input[type="url"],
+select {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  font-family: var(--font-family);
+  font-size: var(--font-size-base);
+  color: var(--color-text);
+  background: var(--color-bg);
+  transition: border-color 0.2s;
+}
+
+input:focus,
+select:focus {
+  outline: none;
+  border-color: var(--color-accent);
+}
+
+.password-field {
+  display: flex;
+  gap: var(--spacing-xs);
+}
+
+.password-field input {
+  flex: 1;
+}
+
+.toggle-visibility {
+  padding: 8px 12px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  background: var(--color-surface);
+  color: var(--color-text-muted);
+  font-family: var(--font-family);
+  font-size: var(--font-size-sm);
+  cursor: pointer;
+  transition: background 0.2s;
+  white-space: nowrap;
+}
+
+.toggle-visibility:hover {
+  background: var(--color-bg);
+}
+
+.status-indicator {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  font-size: var(--font-size-sm);
+}
+
+.status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--color-text-muted);
+}
+
+.status-dot.connected {
+  background: var(--color-accent);
+}
+
+.status-dot.disconnected {
+  background: var(--color-error);
+}
+
+.form-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  margin-top: var(--spacing-md);
+}
+
+.btn-primary {
+  padding: 10px 24px;
+  background: var(--color-accent);
+  color: white;
+  border: none;
+  border-radius: var(--radius);
+  font-family: var(--font-family);
+  font-size: var(--font-size-base);
+  font-weight: 500;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.btn-primary:hover {
+  opacity: 0.9;
+}
+
+.save-status {
+  font-size: var(--font-size-sm);
+  color: var(--color-accent);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.save-status.visible {
+  opacity: 1;
+}
