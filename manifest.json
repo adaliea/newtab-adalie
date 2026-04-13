@@ -15,7 +15,9 @@
   "host_permissions": [
     "https://api.openweathermap.org/*",
     "https://api.github.com/*",
-    "https://www.googleapis.com/*"
+    "https://www.googleapis.com/*",
+    "https://xkcd.com/*",
+    "https://ws.audioscrobbler.com/*"
   ],
   "optional_host_permissions": [
     "https://*/*"

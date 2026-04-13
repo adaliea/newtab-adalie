@@ -1,21 +1,19 @@
 import { fetchJSON } from '../lib/api.js';
-import { getCached, setCache, showRefreshing, hideRefreshing, showStale, hideStale } from '../lib/cache.js';
+import { getCached, setCache, showStale, hideStale } from '../lib/cache.js';
+import { getWeatherIconPath } from '../lib/weather-icons.js';
 
 const CACHE_KEY = 'weatherCache';
 
 export async function initWeather(container, settings) {
-  const content = container.querySelector('.widget-content');
-
   if (!settings.weatherApiKey) {
-    content.className = 'widget-content setup-message';
-    content.innerHTML = 'Add your <a href="settings.html">OpenWeatherMap API key</a> to see weather.';
+    container.innerHTML = '<div class="setup-message">Add your <a href="settings.html">OpenWeatherMap API key</a> to see weather.</div>';
     return;
   }
 
   const cached = await getCached(CACHE_KEY);
   if (cached) {
-    render(content, cached, settings.weatherUnits);
-    showRefreshing(container);
+    render(container, cached, settings.weatherUnits);
+    addSpinner(container);
   }
 
   try {
@@ -26,20 +24,19 @@ export async function initWeather(container, settings) {
 
     await setCache(CACHE_KEY, { ...data, _units: settings.weatherUnits });
     hideStale(container);
-    render(content, data, settings.weatherUnits);
+    render(container, data, settings.weatherUnits);
   } catch (err) {
     if (cached) {
       showStale(container, 'Showing cached data — refresh failed');
     } else {
-      content.className = 'widget-content widget-error';
       if (err.message.includes('denied') || err.message.includes('permission')) {
-        content.textContent = 'Location access denied. Allow location to see weather.';
+        container.innerHTML = '<div class="widget-error">Location access denied. Allow location to see weather.</div>';
       } else {
-        content.textContent = `Could not load weather: ${err.message}`;
+        container.innerHTML = `<div class="widget-error">Could not load weather: ${err.message}</div>`;
       }
     }
   } finally {
-    hideRefreshing(container);
+    removeSpinner(container);
   }
 }
 
@@ -48,30 +45,30 @@ function render(el, data, units) {
   const speedUnit = units === 'imperial' ? 'mph' : 'm/s';
   const temp = Math.round(data.main.temp);
   const feelsLike = Math.round(data.main.feels_like);
-  const high = Math.round(data.main.temp_max);
-  const low = Math.round(data.main.temp_min);
   const humidity = data.main.humidity;
   const wind = Math.round(data.wind.speed);
   const desc = data.weather[0].description;
   const icon = data.weather[0].icon;
-  const city = data.name;
+  const iconPath = getWeatherIconPath(icon);
 
-  el.className = 'widget-content';
   el.innerHTML = `
-    <div class="weather-main">
-      <img class="weather-icon" src="https://openweathermap.org/img/wn/${icon}@2x.png" alt="${desc}">
-      <div>
-        <div class="weather-temp">${temp}°${unitSymbol}</div>
-        <div class="weather-details">${city}</div>
-      </div>
+    <img class="hero-weather-icon" src="${iconPath}" alt="${desc}">
+    <div class="hero-weather-info">
+      <div class="hero-weather-temp">${temp}°${unitSymbol}</div>
+      <div class="hero-weather-desc">${desc}</div>
+      <div class="hero-weather-details">Feels like ${feelsLike}° · ${humidity}% humidity · ${wind} ${speedUnit}</div>
     </div>
-    <div class="weather-details">${capitalize(desc)} · H: ${high}° L: ${low}°</div>
-    <div class="weather-details">Feels like ${feelsLike}° · Humidity ${humidity}% · Wind ${wind} ${speedUnit}</div>
   `;
 }
 
-function capitalize(str) {
-  return str.charAt(0).toUpperCase() + str.slice(1);
+function addSpinner(container) {
+  if (container.querySelector('.widget-spinner')) return;
+  container.insertAdjacentHTML('beforeend', '<span class="widget-spinner" style="align-self:center"></span>');
+}
+
+function removeSpinner(container) {
+  const s = container.querySelector('.widget-spinner');
+  if (s) s.remove();
 }
 
 function getPosition() {

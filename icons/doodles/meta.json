@@ -1,0 +1,63 @@
+
+{
+  "simple": [
+    { "file": "simple/AdobeStock_1245392456.svg" },
+    { "file": "simple/AdobeStock_1331623857.svg" },
+    { "file": "simple/AdobeStock_1673987268.svg" },
+    { "file": "simple/AdobeStock_1682603040.svg" },
+    { "file": "simple/AdobeStock_1708041963.svg" },
+    { "file": "simple/AdobeStock_1741853746.svg" },
+    { "file": "simple/AdobeStock_1764349352.svg" },
+    { "file": "simple/AdobeStock_1969524496.svg" },
+    { "file": "simple/AdobeStock_548803468.svg" },
+    { "file": "simple/Kawaii-crossaint.svg" },
+    { "file": "simple/coquette-bouquet.svg" },
+    { "file": "simple/what-i-am-reading.svg" }
+  ],
+  "complex": [
+    { "file": "complex/Banned-book-reader.svg" },
+    { "file": "complex/Kawaii-Book.svg" },
+    { "file": "complex/Kawaii-Cozy-Tea-Time.svg" },
+    { "file": "complex/Kawaii-berry.svg" },
+    { "file": "complex/Kawaii-egg-avocado.svg" },
+    { "file": "complex/cozy-book-reader.svg" },
+    { "file": "complex/cozy-cat.svg" }
+  ],
+  "sheets": [
+    {
+      "file": "sheets/AdobeStock_1646264407.svg",
+      "viewBox": [0, 0, 9999, 5000],
+      "cols": 6,
+      "rows": 4,
+      "inset": 0.1
+    },
+    {
+      "file": "sheets/AdobeStock_1864994272.svg",
+      "viewBox": [0, 0, 2078.7466, 1133.8586],
+      "cols": 4,
+      "rows": 2,
+      "inset": 0.1
+    },
+    {
+      "file": "sheets/AdobeStock_1864994315.svg",
+      "viewBox": [0, 0, 2078.7466, 1133.8586],
+      "cols": 4,
+      "rows": 2,
+      "inset": 0.1
+    },
+    {
+      "file": "sheets/AdobeStock_1864994331.svg",
+      "viewBox": [0, 0, 2078.7466, 1133.8586],
+      "cols": 4,
+      "rows": 2,
+      "inset": 0.1
+    },
+    {
+      "file": "sheets/AdobeStock_1925268651.svg",
+      "viewBox": [0, 0, 3640, 2048],
+      "cols": 5,
+      "rows": 3,
+      "inset": 0.1
+    }
+  ]
+}

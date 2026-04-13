@@ -1,6 +1,6 @@
 import { getSettings, saveSettings } from './lib/storage.js';
 
-const FIELDS = ['userName', 'weatherApiKey', 'weatherUnits', 'githubToken', 'canvasUrl', 'canvasToken'];
+const FIELDS = ['userName', 'weatherApiKey', 'weatherUnits', 'githubToken', 'canvasUrl', 'canvasToken', 'lastfmApiKey', 'lastfmUsername', 'themeMode'];
 
 async function loadSettings() {
   const settings = await getSettings();

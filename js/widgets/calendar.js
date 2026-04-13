@@ -111,8 +111,14 @@ function renderEvents(el, events) {
 
     const location = event.location ? `<span class="widget-item-sub"> · ${event.location}</span>` : '';
 
+    const link = event.htmlLink;
+    const title = escapeHtml(event.summary || '(No title)');
+    const titleHtml = link
+      ? `<a class="widget-item-title" href="${escapeHtml(link)}" target="_blank" rel="noopener">${title}</a>`
+      : `<div class="widget-item-title">${title}</div>`;
+
     return `<li>
-      <div class="widget-item-title">${escapeHtml(event.summary || '(No title)')}</div>
+      ${titleHtml}
       <div class="widget-item-meta">${timeStr}${location}</div>
     </li>`;
   }).join('');

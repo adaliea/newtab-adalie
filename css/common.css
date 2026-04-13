@@ -1,13 +1,13 @@
 :root {
-  --color-bg: #fafafa;
-  --color-surface: #ffffff;
-  --color-text: #2c2c2c;
-  --color-text-muted: #8a8a8a;
-  --color-border: #e8e8e8;
-  --color-accent: #4a7c6f;
-  --color-accent-light: #e8f0ed;
-  --color-error: #c0392b;
-  --color-error-light: #fdf0ef;
+  --color-bg: #1a1a2e;
+  --color-surface: rgba(22, 33, 62, 0.85);
+  --color-text: #e0e0e0;
+  --color-text-muted: #999;
+  --color-border: #2a2a4a;
+  --color-accent: #6bc4a6;
+  --color-accent-light: rgba(107, 196, 166, 0.15);
+  --color-error: #e74c3c;
+  --color-error-light: rgba(231, 76, 60, 0.15);
 
   --font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   --font-size-xs: 0.7rem;
@@ -23,8 +23,20 @@
   --spacing-lg: 2.5rem;
   --spacing-xl: 4rem;
 
-  --radius: 8px;
-  --shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+  --radius: 12px;
+  --shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+[data-theme="light"] {
+  --color-bg: #fafafa;
+  --color-surface: #ffffff;
+  --color-text: #2c2c2c;
+  --color-text-muted: #8a8a8a;
+  --color-border: #e8e8e8;
+  --color-accent: #4a7c6f;
+  --color-accent-light: #e8f0ed;
+  --color-error: #c0392b;
+  --color-error-light: #fdf0ef;
 }
 
 *, *::before, *::after {
@@ -36,11 +48,17 @@
 body {
   font-family: var(--font-family);
   font-size: var(--font-size-base);
-  background: var(--color-bg);
   color: var(--color-text);
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+#sky-gradient {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  transition: background 2s ease;
 }
 
 a {

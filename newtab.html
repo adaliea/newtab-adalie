@@ -4,20 +4,36 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>New Tab</title>
+  <script src="js/anti-fouc.js"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&family=DM+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/common.css">
   <link rel="stylesheet" href="css/newtab.css">
 </head>
 <body>
+  <div id="sky-gradient"></div>
+
+  <div id="corner-doodles">
+    <div class="corner-doodle corner-doodle--tl"></div>
+    <div class="corner-doodle corner-doodle--tr"></div>
+    <div class="corner-doodle corner-doodle--bl"></div>
+    <div class="corner-doodle corner-doodle--br"></div>
+  </div>
+
   <a href="settings.html" class="settings-link" title="Settings">&#9881;</a>
 
   <div class="page">
     <section class="hero" id="widget-clock">
-      <div class="greeting"></div>
-      <div class="time"></div>
-      <div class="date"></div>
+      <div class="hero-left">
+        <div class="greeting"></div>
+        <div class="time"></div>
+        <div class="date"></div>
+      </div>
+      <div class="hero-divider"></div>
+      <div class="hero-weather" id="widget-weather">
+        <div class="hero-weather-loading">...</div>
+      </div>
     </section>
 
     <nav class="quick-links" id="quick-links"></nav>
@@ -36,36 +52,51 @@
       </div>
     </section>
 
-    <div class="widgets">
-      <section class="widget" id="widget-weather">
-        <div class="widget-header">Weather</div>
-        <div class="widget-content widget-loading">Loading...</div>
-      </section>
+    <div class="columns">
+      <div class="column-main">
+        <section class="widget" id="widget-calendar">
+          <div class="widget-header">Calendar</div>
+          <div class="widget-content widget-loading">Loading...</div>
+        </section>
 
-      <section class="widget" id="widget-calendar">
-        <div class="widget-header">Calendar</div>
-        <div class="widget-content widget-loading">Loading...</div>
-      </section>
+        <section class="widget" id="widget-tasks">
+          <div class="widget-header">Tasks</div>
+          <div class="widget-content widget-loading">Loading...</div>
+        </section>
+        <div>
+          <section class="widget" id="widget-github">
+            <div class="widget-header">GitHub</div>
+            <div class="widget-content widget-loading">Loading...</div>
+          </section>
 
-      <section class="widget" id="widget-tasks">
-        <div class="widget-header">Tasks</div>
-        <div class="widget-content widget-loading">Loading...</div>
-      </section>
+          <section class="widget" id="widget-announcements">
+            <div class="widget-header">Canvas — Announcements</div>
+            <div class="widget-content widget-loading">Loading...</div>
+          </section>
+        </div>
 
-      <section class="widget" id="widget-github">
-        <div class="widget-header">GitHub</div>
-        <div class="widget-content widget-loading">Loading...</div>
-      </section>
 
-      <section class="widget" id="widget-canvas">
-        <div class="widget-header">Canvas — Assignments</div>
-        <div class="widget-content widget-loading">Loading...</div>
-      </section>
+        <section class="widget" id="widget-canvas">
+          <div class="widget-header">Canvas — Assignments</div>
+          <div class="widget-content widget-loading">Loading...</div>
+        </section>
 
-      <section class="widget" id="widget-announcements">
-        <div class="widget-header">Canvas — Announcements</div>
-        <div class="widget-content widget-loading">Loading...</div>
-      </section>
+
+      </div>
+
+      <div class="column-divider"></div>
+
+      <div class="column-fun">
+        <section class="widget widget--fun" id="widget-lastfm">
+          <div class="widget-header">Last.fm</div>
+          <div class="widget-content widget-loading">Loading...</div>
+        </section>
+
+        <section class="widget widget--fun" id="widget-xkcd">
+          <div class="widget-header">xkcd</div>
+          <div class="widget-content widget-loading">Loading...</div>
+        </section>
+      </div>
     </div>
   </div>
 

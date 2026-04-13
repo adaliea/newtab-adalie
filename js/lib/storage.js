@@ -5,7 +5,10 @@ const DEFAULTS = {
   githubToken: '',
   canvasUrl: '',
   canvasToken: '',
-  pinnedSites: []
+  pinnedSites: [],
+  lastfmApiKey: '',
+  lastfmUsername: '',
+  themeMode: 'auto'
 };
 
 export async function getSettings() {

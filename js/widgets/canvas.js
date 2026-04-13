@@ -20,17 +20,18 @@ export async function initCanvas(assignmentsContainer, announcementsContainer, s
   const cachedAssign = await getCached(ASSIGN_CACHE);
   const cachedAnnounce = await getCached(ANNOUNCE_CACHE);
 
+  const baseUrl = settings.canvasUrl.replace(/\/+$/, '');
+  const headers = { Authorization: `Bearer ${settings.canvasToken}` };
+  const origin = new URL(baseUrl).origin;
+
   if (cachedAssign) {
-    renderAssignments(assignContent, cachedAssign);
+    renderAssignments(assignContent, cachedAssign, origin);
     showRefreshing(assignmentsContainer);
   }
   if (cachedAnnounce) {
-    renderAnnouncements(announceContent, cachedAnnounce);
+    renderAnnouncements(announceContent, cachedAnnounce, origin);
     showRefreshing(announcementsContainer);
   }
-
-  const baseUrl = settings.canvasUrl.replace(/\/+$/, '');
-  const headers = { Authorization: `Bearer ${settings.canvasToken}` };
 
   try {
     const today = new Date().toISOString().split('T')[0];
@@ -58,8 +59,8 @@ export async function initCanvas(assignmentsContainer, announcementsContainer, s
 
     hideStale(assignmentsContainer);
     hideStale(announcementsContainer);
-    renderAssignments(assignContent, assignments);
-    renderAnnouncements(announceContent, announcements);
+    renderAssignments(assignContent, assignments, origin);
+    renderAnnouncements(announceContent, announcements, origin);
   } catch (err) {
     if (cachedAssign) {
       showStale(assignmentsContainer, 'Showing cached data — refresh failed');
@@ -79,7 +80,7 @@ export async function initCanvas(assignmentsContainer, announcementsContainer, s
   }
 }
 
-function renderAssignments(el, assignments) {
+function renderAssignments(el, assignments, origin) {
   el.className = 'widget-content';
 
   if (assignments.length === 0) {
@@ -87,10 +88,10 @@ function renderAssignments(el, assignments) {
     return;
   }
 
-  el.innerHTML = `<ul class="widget-list">${assignments.map(renderAssignment).join('')}</ul>`;
+  el.innerHTML = `<ul class="widget-list">${assignments.map(a => renderAssignment(a, origin)).join('')}</ul>`;
 }
 
-function renderAnnouncements(el, announcements) {
+function renderAnnouncements(el, announcements, origin) {
   el.className = 'widget-content';
 
   if (announcements.length === 0) {
@@ -98,10 +99,10 @@ function renderAnnouncements(el, announcements) {
     return;
   }
 
-  el.innerHTML = `<ul class="widget-list">${announcements.map(renderAnnouncement).join('')}</ul>`;
+  el.innerHTML = `<ul class="widget-list">${announcements.map(a => renderAnnouncement(a, origin)).join('')}</ul>`;
 }
 
-function renderAssignment(item) {
+function renderAssignment(item, origin) {
   const course = item.context_name || '';
   const title = item.plannable?.title || item.plannable_type || 'Untitled';
   const dueAt = item.plannable?.due_at;
@@ -122,7 +123,8 @@ function renderAssignment(item) {
     }
   }
 
-  const url = item.html_url || item.plannable?.html_url || '';
+  const rawUrl = item.html_url || item.plannable?.html_url || '';
+  const url = resolveCanvasUrl(rawUrl, origin);
   const titleHtml = url
     ? `<a href="${url}" target="_blank" rel="noopener">${escapeHtml(title)}</a>`
     : escapeHtml(title);
@@ -134,10 +136,11 @@ function renderAssignment(item) {
   </li>`;
 }
 
-function renderAnnouncement(item) {
+function renderAnnouncement(item, origin) {
   const course = item.context_type === 'Course' ? (item.course?.name || '') : '';
   const title = item.title || 'Untitled';
-  const url = item.html_url || '';
+  const rawUrl = item.html_url || '';
+  const url = resolveCanvasUrl(rawUrl, origin);
   const posted = new Date(item.created_at).toLocaleDateString(undefined, {
     month: 'short',
     day: 'numeric'
@@ -152,6 +155,12 @@ function renderAnnouncement(item) {
     <div class="widget-item-title">${titleHtml}</div>
     <div class="widget-item-meta">${posted}</div>
   </li>`;
+}
+
+function resolveCanvasUrl(url, origin) {
+  if (!url) return '';
+  if (url.startsWith('http://') || url.startsWith('https://')) return url;
+  return origin + (url.startsWith('/') ? '' : '/') + url;
 }
 
 function isSameDay(a, b) {
