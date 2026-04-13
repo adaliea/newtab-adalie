@@ -14,7 +14,7 @@ export function initQuickLinks(container, settings) {
   }
 
   container.innerHTML = links.map((link) =>
-    `<a href="${link.url}" class="quick-link" target="_blank" rel="noopener">
+    `<a href="${link.url}" class="quick-link">
       <span class="quick-link-icon">${link.icon}</span>
       <span class="quick-link-label">${link.label}</span>
     </a>`

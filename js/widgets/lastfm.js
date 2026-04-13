@@ -64,7 +64,7 @@ function render(el, tracks) {
     const ytmUrl = `https://music.youtube.com/search?q=${ytmQuery}`;
 
     return `
-      <a class="lastfm-track" href="${ytmUrl}" target="_blank" rel="noopener">
+      <a class="lastfm-track" href="${ytmUrl}">
         ${artHtml}
         <div class="lastfm-track-info">
           <div class="lastfm-track-name">${escapeHtml(track.name)}</div>

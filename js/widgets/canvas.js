@@ -126,7 +126,7 @@ function renderAssignment(item, origin) {
   const rawUrl = item.html_url || item.plannable?.html_url || '';
   const url = resolveCanvasUrl(rawUrl, origin);
   const titleHtml = url
-    ? `<a href="${url}" target="_blank" rel="noopener">${escapeHtml(title)}</a>`
+    ? `<a href="${url}">${escapeHtml(title)}</a>`
     : escapeHtml(title);
 
   return `<li>
@@ -147,7 +147,7 @@ function renderAnnouncement(item, origin) {
   });
 
   const titleHtml = url
-    ? `<a href="${url}" target="_blank" rel="noopener">${escapeHtml(title)}</a>`
+    ? `<a href="${url}">${escapeHtml(title)}</a>`
     : escapeHtml(title);
 
   return `<li>

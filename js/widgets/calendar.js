@@ -114,7 +114,7 @@ function renderEvents(el, events) {
     const link = event.htmlLink;
     const title = escapeHtml(event.summary || '(No title)');
     const titleHtml = link
-      ? `<a class="widget-item-title" href="${escapeHtml(link)}" target="_blank" rel="noopener">${title}</a>`
+      ? `<a class="widget-item-title" href="${escapeHtml(link)}">${title}</a>`
       : `<div class="widget-item-title">${title}</div>`;
 
     return `<li>

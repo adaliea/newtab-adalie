@@ -85,7 +85,7 @@ function renderIssue(item) {
   return `<li>
     <div class="widget-item-sub">${escapeHtml(repoName)}</div>
     <div class="widget-item-title">
-      <a href="${item.html_url}" target="_blank" rel="noopener">${escapeHtml(item.title)}</a>
+      <a href="${item.html_url}">${escapeHtml(item.title)}</a>
     </div>
     ${labels ? `<div style="margin-top:2px">${labels}</div>` : ''}
   </li>`;
