@@ -24,7 +24,7 @@ export async function initWeather(container, settings) {
     const url = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${settings.weatherApiKey}&units=${settings.weatherUnits}`;
     const data = await fetchJSON(url);
 
-    await setCache(CACHE_KEY, data);
+    await setCache(CACHE_KEY, { ...data, _units: settings.weatherUnits });
     hideStale(container);
     render(content, data, settings.weatherUnits);
   } catch (err) {
