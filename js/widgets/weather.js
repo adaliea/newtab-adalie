@@ -63,7 +63,7 @@ function render(el, data, units) {
 
 function addSpinner(container) {
   if (container.querySelector('.widget-spinner')) return;
-  container.insertAdjacentHTML('beforeend', '<span class="widget-spinner" style="align-self:center"></span>');
+  container.insertAdjacentHTML('beforeend', '<span class="widget-spinner" style="align-self:center; position: absolute;"></span>');
 }
 
 function removeSpinner(container) {

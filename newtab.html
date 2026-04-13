@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>New Tab</title>
+  <link rel="icon" type="image/svg+xml" href="icons/doodles/simple/Kawaii-crossaint.svg">
   <script src="js/anti-fouc.js"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -39,11 +40,11 @@
     <nav class="quick-links" id="quick-links"></nav>
 
     <section class="sites-section" id="sites-section">
+
       <div class="sites-header">
-        <span class="widget-header" style="margin-bottom:0">Sites</span>
-        <button class="sites-add-btn" id="add-site-btn" title="Pin a site">+</button>
+        <div class="sites-grid" id="sites-grid"></div>
+        <button class="sites-add-btn" id="add-site-btn" title="Pin a site" style="margin-left: 1.1rem">+</button>
       </div>
-      <div class="sites-grid" id="sites-grid"></div>
       <div class="pin-form" id="pin-form" hidden>
         <input type="text" id="pin-name" placeholder="Name" class="pin-input">
         <input type="url" id="pin-url" placeholder="https://..." class="pin-input">
