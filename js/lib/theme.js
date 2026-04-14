@@ -1,16 +1,16 @@
 const GRADIENT_STOPS = [
-  { hour: 0,  top: '#0d1b2a', bottom: '#1b1464' },
-  { hour: 5,  top: '#0d1b2a', bottom: '#1b1464' },
-  { hour: 6,  top: '#ffd1dc', bottom: '#bde0fe' },
-  { hour: 7,  top: '#ffc8d6', bottom: '#bde0fe' },
-  { hour: 8,  top: '#bde0fe', bottom: '#e8f4f8' },
-  { hour: 10, top: '#bde0fe', bottom: '#fff9c4' },
-  { hour: 12, top: '#87ceeb', bottom: '#f0f4f8' },
-  { hour: 17, top: '#87ceeb', bottom: '#f0f4f8' },
-  { hour: 18, top: '#ffb347', bottom: '#d4a5e5' },
-  { hour: 20, top: '#7b2d8e', bottom: '#1a237e' },
-  { hour: 22, top: '#0d1b2a', bottom: '#1b1464' },
-  { hour: 24, top: '#0d1b2a', bottom: '#1b1464' },
+  { hour: 0,  top: '#0d1b2a', bottom: '#1b1464', text: '#c8cdd3', muted: '#8a94a0' },
+  { hour: 5,  top: '#0d1b2a', bottom: '#1b1464', text: '#c8cdd3', muted: '#8a94a0' },
+  { hour: 6,  top: '#ffd1dc', bottom: '#bde0fe', text: '#3a2a2f', muted: '#6b4f58' },
+  { hour: 7,  top: '#ffc8d6', bottom: '#bde0fe', text: '#2e3640', muted: '#556270' },
+  { hour: 8,  top: '#bde0fe', bottom: '#e8f4f8', text: '#2a3540', muted: '#4e6070' },
+  { hour: 10, top: '#bde0fe', bottom: '#fff9c4', text: '#2a3540', muted: '#4e6070' },
+  { hour: 12, top: '#87ceeb', bottom: '#f0f4f8', text: '#1e3044', muted: '#3d5a70' },
+  { hour: 17, top: '#87ceeb', bottom: '#f0f4f8', text: '#1e3044', muted: '#3d5a70' },
+  { hour: 18, top: '#ffb347', bottom: '#d4a5e5', text: '#3a2200', muted: '#5c3d1a' },
+  { hour: 20, top: '#7b2d8e', bottom: '#1a237e', text: '#d4c0db', muted: '#9a82a4' },
+  { hour: 22, top: '#0d1b2a', bottom: '#1b1464', text: '#c8cdd3', muted: '#8a94a0' },
+  { hour: 24, top: '#0d1b2a', bottom: '#1b1464', text: '#c8cdd3', muted: '#8a94a0' },
 ];
 
 export function initTheme(settings) {
@@ -53,11 +53,17 @@ function updateGradient(hour) {
 
   const top = lerpColor(lower.top, upper.top, t);
   const bottom = lerpColor(lower.bottom, upper.bottom, t);
+  const text = lerpColor(lower.text, upper.text, t);
+  const muted = lerpColor(lower.muted, upper.muted, t);
 
   const el = document.getElementById('sky-gradient');
   if (el) {
     el.style.background = `linear-gradient(to bottom, ${top}, ${bottom})`;
   }
+
+  const root = document.documentElement;
+  root.style.setProperty('--color-sky-text', text);
+  root.style.setProperty('--color-sky-muted', muted);
 }
 
 export function getTimeOfDay() {

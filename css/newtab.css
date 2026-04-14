@@ -1,5 +1,5 @@
 .page {
-  max-width: 1600px;
+  max-width: 1800px;
   margin: 0 auto;
   padding: var(--spacing-lg) var(--spacing-lg) var(--spacing-xl);
   min-height: 100vh;
@@ -38,6 +38,20 @@
   justify-content: center;
   gap: var(--spacing-xl);
   padding: var(--spacing-xl) 0 var(--spacing-lg);
+}
+
+/* Elements on the sky gradient use interpolated colors for readability */
+.hero .time,
+.hero-weather-temp {
+  color: var(--color-sky-text);
+}
+
+.hero .greeting,
+.hero .date,
+.hero-weather-desc,
+.hero-weather-details,
+.site-label {
+  color: var(--color-sky-muted);
 }
 
 .hero-left {
@@ -315,7 +329,7 @@
 /* Two-column layout */
 .columns {
   display: grid;
-  grid-template-columns: 5fr auto 2fr;
+  grid-template-columns: 5fr auto 2.2fr;
   gap: var(--spacing-lg);
   align-items: start;
 }
@@ -625,7 +639,7 @@
   display: flex;
   align-items: center;
   gap: var(--spacing-xs);
-  padding: var(--spacing-xs) 0;
+  padding: var(--spacing-xs);
   border-bottom: 1px solid var(--color-border);
 }
 
@@ -697,7 +711,7 @@ a.lastfm-track:hover {
 }
 
 /* Responsive */
-@media (max-width: 950px) {
+@media (max-width: 1100px) {
   .column-main {
     grid-template-columns: 1fr;
   }
