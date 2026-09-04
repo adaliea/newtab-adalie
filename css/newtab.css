@@ -412,6 +412,16 @@
   line-height: 1;
 }
 
+.widget-updated {
+  margin-left: auto;
+  font-family: 'DM Sans', var(--font-family);
+  font-size: 10px;
+  font-weight: 400;
+  letter-spacing: normal;
+  text-transform: none;
+  white-space: nowrap;
+}
+
 .widget-empty,
 .widget-error,
 .widget-loading {

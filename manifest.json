@@ -9,6 +9,7 @@
   },
   "permissions": [
     "identity",
+    "scripting",
     "storage",
     "topSites"
   ],
@@ -16,6 +17,7 @@
     "https://api.openweathermap.org/*",
     "https://api.github.com/*",
     "https://www.googleapis.com/*",
+    "https://psu.instructure.com/*",
     "https://xkcd.com/*",
     "https://ws.audioscrobbler.com/*"
   ],

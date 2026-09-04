@@ -75,17 +75,18 @@
       <fieldset>
         <legend>Canvas</legend>
         <p class="fieldset-help">
-          Enter your institution's Canvas URL and an access token.
-          Generate a token in Canvas under Account &rarr; Settings &rarr; New Access Token.
+          Enter your institution's Canvas URL. If you leave the token blank, the extension uses
+          your existing Canvas browser session. Keep a signed-in Canvas tab open if your browser
+          blocks cross-site cookies.
         </p>
         <label>
           <span class="label-text">Canvas URL</span>
           <input type="url" id="canvasUrl" placeholder="https://canvas.university.edu">
         </label>
         <label>
-          <span class="label-text">Access Token</span>
+          <span class="label-text">Access Token (optional)</span>
           <div class="password-field">
-            <input type="password" id="canvasToken" placeholder="Your Canvas API token">
+            <input type="password" id="canvasToken" placeholder="Leave blank to use browser sign-in">
             <button type="button" class="toggle-visibility" data-target="canvasToken">Show</button>
           </div>
         </label>

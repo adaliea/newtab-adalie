@@ -1,11 +1,16 @@
 export async function getCached(key) {
-  const result = await chrome.storage.local.get(key);
-  return result[key]?.data ?? null;
+  const entry = await getCacheEntry(key);
+  return entry?.data ?? null;
 }
 
-export async function setCache(key, data) {
+export async function getCacheEntry(key) {
+  const result = await chrome.storage.local.get(key);
+  return result[key] ?? null;
+}
+
+export async function setCache(key, data, timestamp = Date.now()) {
   await chrome.storage.local.set({
-    [key]: { data, timestamp: Date.now() }
+    [key]: { data, timestamp }
   });
 }
 

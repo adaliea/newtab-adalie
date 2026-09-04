@@ -51,8 +51,10 @@ Click the gear icon (top-right) or right-click the extension > **Options** to co
 - Paste it in Settings > GitHub
 
 ### Canvas
-- In Canvas, go to Account > Settings > New Access Token
-- Paste your institution's Canvas URL and the token in Settings > Canvas
+- Enter your institution's Canvas URL in Settings > Canvas
+- Leave the access token blank to reuse your signed-in Canvas browser session
+- If Canvas reports that sign-in is needed, keep a signed-in Canvas tab open and open a new tab again
+- A personal access token remains supported as an optional fallback
 
 ### Last.fm
 - Create a free API account at [Last.fm](https://www.last.fm/api/account/create)
