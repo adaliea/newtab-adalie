@@ -101,7 +101,9 @@ function renderEvents(el, events) {
     let timeStr;
 
     if (isAllDay) {
-      timeStr = 'All day';
+      const start = parseLocalDate(event.start.date);
+      const dayLabel = isSameDay(start, today) ? 'Today' : isSameDay(start, tomorrow) ? 'Tomorrow' : start.toLocaleDateString(undefined, { weekday: 'long', month: 'short', day: 'numeric' });
+      timeStr = `${dayLabel} · All day`;
     } else {
       const start = new Date(event.start.dateTime);
       const dayLabel = isSameDay(start, today) ? 'Today' : isSameDay(start, tomorrow) ? 'Tomorrow' : '';
@@ -130,6 +132,11 @@ function isSameDay(a, b) {
   return a.getFullYear() === b.getFullYear() &&
     a.getMonth() === b.getMonth() &&
     a.getDate() === b.getDate();
+}
+
+function parseLocalDate(dateStr) {
+  const [year, month, day] = dateStr.split('-').map(Number);
+  return new Date(year, month - 1, day);
 }
 
 function escapeHtml(str) {

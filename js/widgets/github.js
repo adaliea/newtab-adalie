@@ -24,13 +24,19 @@ export async function initGitHub(container, settings) {
   };
 
   try {
-    const [issues, prs] = await Promise.all([
+    const [issues, assignedPrs, reviewPrs] = await Promise.all([
       fetchJSON('https://api.github.com/issues?filter=assigned&state=open&per_page=10', headers),
-      fetchJSON('https://api.github.com/search/issues?q=is:pr+is:open+assignee:@me&per_page=10', headers)
+      fetchJSON('https://api.github.com/search/issues?q=is:pr+is:open+assignee:@me&per_page=10', headers),
+      fetchJSON('https://api.github.com/search/issues?q=is:pr+is:open+review-requested:@me&per_page=10', headers)
     ]);
 
     const realIssues = issues.filter((i) => !i.pull_request);
-    const pullRequests = prs.items || [];
+    const seen = new Set();
+    const pullRequests = [...(assignedPrs.items || []), ...(reviewPrs.items || [])].filter((pr) => {
+      if (seen.has(pr.id)) return false;
+      seen.add(pr.id);
+      return true;
+    });
 
     await setCache(CACHE_KEY, { issues: realIssues, prs: pullRequests });
     hideStale(container);
@@ -75,6 +81,7 @@ function renderIssue(item) {
   const repoName = item.repository_url
     ? item.repository_url.split('/').slice(-2).join('/')
     : (item.repository?.full_name || '');
+  const repoUrl = repoName ? `https://github.com/${repoName}` : '';
 
   const labels = (item.labels || []).map((label) => {
     const bg = `#${label.color}`;
@@ -83,7 +90,7 @@ function renderIssue(item) {
   }).join(' ');
 
   return `<li>
-    <div class="widget-item-sub">${escapeHtml(repoName)}</div>
+    <div class="widget-item-sub">${repoUrl ? `<a href="${repoUrl}">${escapeHtml(repoName)}</a>` : escapeHtml(repoName)}</div>
     <div class="widget-item-title">
       <a href="${item.html_url}">${escapeHtml(item.title)}</a>
     </div>

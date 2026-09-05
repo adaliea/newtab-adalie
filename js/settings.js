@@ -61,6 +61,7 @@ document.getElementById('settings-form').addEventListener('submit', async (e) =>
   }
 
   await saveSettings(values);
+  localStorage.setItem('themeMode', values.themeMode);
 
   const status = document.getElementById('save-status');
   status.textContent = 'Saved!';

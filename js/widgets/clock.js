@@ -1,5 +1,7 @@
 import { getCached } from '../lib/cache.js';
 
+let clockInterval = null;
+
 export async function initClock(container, settings) {
   const greetingEl = container.querySelector('.greeting');
   const timeEl = container.querySelector('.time');
@@ -28,7 +30,8 @@ export async function initClock(container, settings) {
   }
 
   update();
-  setInterval(update, 1000);
+  if (clockInterval) clearInterval(clockInterval);
+  clockInterval = setInterval(update, 1000);
 }
 
 function pickGreeting(now, weather, name) {

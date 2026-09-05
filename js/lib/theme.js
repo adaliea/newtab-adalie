@@ -8,19 +8,24 @@ const GRADIENT_STOPS = [
   { hour: 12, top: '#87ceeb', bottom: '#f0f4f8', text: '#1e3044', muted: '#3d5a70' },
   { hour: 17, top: '#87ceeb', bottom: '#f0f4f8', text: '#1e3044', muted: '#3d5a70' },
   { hour: 18, top: '#ffb347', bottom: '#d4a5e5', text: '#3a2200', muted: '#5c3d1a' },
+  { hour: 19, top: '#4a2560', bottom: '#1f1a56', text: '#e0d4e8', muted: '#a898b5' },
   { hour: 20, top: '#7b2d8e', bottom: '#1a237e', text: '#d4c0db', muted: '#9a82a4' },
   { hour: 22, top: '#0d1b2a', bottom: '#1b1464', text: '#c8cdd3', muted: '#8a94a0' },
   { hour: 24, top: '#0d1b2a', bottom: '#1b1464', text: '#c8cdd3', muted: '#8a94a0' },
 ];
 
+let themeInterval = null;
+
 export function initTheme(settings) {
   update(settings);
-  setInterval(() => update(settings), 60 * 1000);
+  if (themeInterval) clearInterval(themeInterval);
+  themeInterval = setInterval(() => update(settings), 60 * 1000);
 }
 
 function update(settings) {
   const hour = getCurrentHourFraction();
   const mode = settings?.themeMode || 'auto';
+  localStorage.setItem('themeMode', mode);
 
   if (mode === 'auto') {
     document.documentElement.dataset.theme = (hour >= 19 || hour < 6) ? 'dark' : 'light';

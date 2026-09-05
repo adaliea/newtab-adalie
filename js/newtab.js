@@ -18,6 +18,26 @@ document.addEventListener('DOMContentLoaded', async () => {
   initTheme(settings);
   initDoodles();
 
+  // Set dynamic header links
+  if (settings.canvasUrl) {
+    document.querySelectorAll('.canvas-header-link').forEach(a => a.href = settings.canvasUrl);
+  }
+  if (settings.lastfmUsername) {
+    document.querySelector('.lastfm-header-link').href = `https://www.last.fm/user/${settings.lastfmUsername}`;
+  }
+
+  refreshWidgets(settings);
+
+  document.addEventListener('visibilitychange', async () => {
+    if (document.visibilityState === 'visible') {
+      const freshSettings = await getSettings();
+      initTheme(freshSettings);
+      refreshWidgets(freshSettings);
+    }
+  });
+});
+
+function refreshWidgets(settings) {
   initClock(document.getElementById('widget-clock'), settings);
   initQuickLinks(document.getElementById('quick-links'), settings);
   initSites(document.getElementById('sites-section'));
@@ -32,4 +52,4 @@ document.addEventListener('DOMContentLoaded', async () => {
   );
   initXkcd(document.getElementById('widget-xkcd'));
   initLastfm(document.getElementById('widget-lastfm'), settings);
-});
+}

@@ -392,6 +392,24 @@
   gap: 6px;
 }
 
+.widget-header-link {
+  color: inherit;
+  text-decoration: none;
+}
+
+.widget-header-link:hover {
+  text-decoration: underline;
+}
+
+.widget-item-sub-link {
+  color: inherit;
+  text-decoration: none;
+}
+
+.widget-item-sub-link:hover {
+  text-decoration: underline;
+}
+
 .widget-spinner {
   width: 10px;
   height: 10px;
@@ -459,6 +477,15 @@
 .widget-item-title {
   font-size: var(--font-size-base);
   font-weight: 500;
+}
+
+.widget-item-title a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.widget-item-title a:hover {
+  text-decoration: underline;
 }
 
 .widget-item-meta {

@@ -221,6 +221,7 @@ function renderAnnouncements(el, announcements, origin) {
 
 function renderAssignment(item, origin) {
   const course = item.context_name || '';
+  const courseId = item.course_id;
   const title = item.plannable?.title || item.plannable_type || 'Untitled';
   const dueAt = item.plannable?.due_at;
   let dueStr = '';
@@ -246,15 +247,20 @@ function renderAssignment(item, origin) {
     ? `<a href="${url}">${escapeHtml(title)}</a>`
     : escapeHtml(title);
 
+  const courseHtml = course && courseId
+    ? `<a href="${origin}/courses/${courseId}" class="widget-item-sub-link">${escapeHtml(course)}</a>`
+    : escapeHtml(course);
+
   return `<li>
-    <div class="widget-item-sub">${escapeHtml(course)}</div>
+    <div class="widget-item-sub">${courseHtml}</div>
     <div class="widget-item-title">${titleHtml}</div>
     ${dueStr ? `<div class="widget-item-meta">${dueStr}</div>` : ''}
   </li>`;
 }
 
 function renderAnnouncement(item, origin) {
-  const course = item.context_type === 'Course' ? (item.course?.name || '') : '';
+  const course = item.context_type === 'Course' ? (item.course?.name || item.context_name || '') : '';
+  const courseId = item.course_id;
   const title = item.title || 'Untitled';
   const rawUrl = item.html_url || '';
   const url = resolveCanvasUrl(rawUrl, origin);
@@ -267,8 +273,12 @@ function renderAnnouncement(item, origin) {
     ? `<a href="${url}">${escapeHtml(title)}</a>`
     : escapeHtml(title);
 
+  const courseHtml = course && courseId
+    ? `<a href="${origin}/courses/${courseId}" class="widget-item-sub-link">${escapeHtml(course)}</a>`
+    : escapeHtml(course);
+
   return `<li>
-    <div class="widget-item-sub">${escapeHtml(course)}</div>
+    <div class="widget-item-sub">${courseHtml}</div>
     <div class="widget-item-title">${titleHtml}</div>
     <div class="widget-item-meta">${posted}</div>
   </li>`;
